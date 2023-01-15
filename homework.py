@@ -1,4 +1,4 @@
-сlass InfoMessage:
+class InfoMessage:
     
     def __init__(self, 
                  training_type: str, 
@@ -60,11 +60,13 @@ class Running(Training):
 
 
 class SportsWalking(Training):
-    coef_walk: float = 0.035
-    coef_walk2: float = 2
-    coef_walk3: float = 0.029
+    """Тренировка: спортивная ходьба."""
+    CF_WALK_1 = 0.035
+    CF_WALK_2 = 2
+    CF_WALK_3 = 0.029
+    TRAINING_TYPE = 'WLK'
 
-    def __init__(self, action: int, duration: float, weight: float, height: int) :
+    def __init__(self, action: int, duration: float, weight: float, height: int):
         super().__init__(action, duration, weight)
         self.height = height
 
@@ -79,7 +81,7 @@ class Swimming(Training):
     coef_swim2: float = 2
     LEN_STEP: float = 1.38
 
-    def __init__(self, action: int, duration: float, weight: float, length_pool: int, count_pool: int) :
+    def __init__(self, action: int, duration: float, weight: float, length_pool: int, count_pool: int):
         super().__init__(action, duration, weight)
         self.length_pool = length_pool
         self.count_pool = count_pool
@@ -91,10 +93,10 @@ class Swimming(Training):
         return length_pool * count_pool / self.M_IN_KM / self.duration
 
     def get_spent_calories(self) -> float:
-         return (self.get_mean_speed() + coef_swim) * coef_swim2 * self.weight * self.durations
+        return (self.get_mean_speed() + coef_swim) * coef_swim2 * self.weight * self.durations
 
 
-def read_package(workout_type: str) :
+def read_package(workout_type: str):
     training_types = {
         'SWM' : Swimming,
         'RUN' : Running,
