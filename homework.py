@@ -1,4 +1,4 @@
-сlass InfoMessage:
+class InfoMessage:
     
     def __init__(self, 
                  training_type: str, 
