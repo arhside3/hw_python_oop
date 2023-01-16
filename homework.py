@@ -68,9 +68,11 @@ class Running(Training):
     TRAINING_TYPE = 'RUN'
 
     def get_spent_calories(self) -> float:
-        cal = self.CF_RUN_1 * self.get_mean_speed() - self.CF_RUN_2
-        calories = cal * self.weight / self.M_IN_KM * self.duration * 60
-        return calories
+        spent_calories = ((self.CF_RUN_1
+                          * self.get_mean_speed()
+                          + self.CF_RUN_2) * self.weight
+                          / self.M_IN_KM *self.duration * self.M_IN_H)
+        return spent_calories
 
 
 class SportsWalking(Training):
