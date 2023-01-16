@@ -25,6 +25,7 @@ class Training:
     """Базовый класс тренировки."""
     LEN_STEP = 0.65
     M_IN_KM = 1000
+    M_IN_H = 60
     TRAINING_TYPE = ''
 
     def __init__(self,
@@ -63,7 +64,7 @@ class Training:
 class Running(Training):
     """Тренировка: бег."""
     CF_RUN_1 = 18
-    CF_RUN_2 = 20
+    CF_RUN_2 = 1.79
     TRAINING_TYPE = 'RUN'
 
     def get_spent_calories(self) -> float:
@@ -77,6 +78,8 @@ class SportsWalking(Training):
     CF_WALK_1 = 0.035
     CF_WALK_2 = 2
     CF_WALK_3 = 0.029
+    KMH_IN_MSEC = 0.278
+    CM_IN_M = 100
     TRAINING_TYPE = 'WLK'
 
     def __init__(self,
