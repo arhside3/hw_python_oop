@@ -93,11 +93,12 @@ class SportsWalking(Training):
         self.height = height
 
     def get_spent_calories(self) -> float:
-        calories_1 = self.CF_WALK_1 * self.weight
-        calories_2 = self.get_mean_speed()**2 // self.height
-        calories_3 = calories_2 * self.CF_WALK_3 * self.weight
-        calories = (calories_1 + calories_3) * self.duration * 60
-        return calories
+        speed_in_second = self.get_mean_speed() * self.KMH_IN_MSEC
+        spent_calories = ((self.CF_WALK_1 * self.weight
+                          + (speed_in_second**2  (self.height / self.CM_IN_M))
+                          * self.CF_WALK_3
+                          * self.weight) * self.duration * self.MIN_IN_H)
+        return spent_calories
 
 
 class Swimming(Training):
@@ -124,8 +125,8 @@ class Swimming(Training):
         return self.speed
 
     def get_spent_calories(self) -> float:
-        calories_1 = self.get_mean_speed() + self.CF_SW_1
-        calories = calories_1 * self.CF_SW_2 * self.weight
+        calories = ((self.get_mean_speed() + self.CF_SW_1
+                    * self.CF_SW_2 * self.weight * self.duration))
         return calories
 
 
