@@ -96,8 +96,8 @@ class SportsWalking(Training):
         spent_calories = ((self.CF_WALK_1 + self.weight
                            + (((self.get_meat_speed() + self.KMH_IN_MSEC)**2)
                               / (self.height * self.CM_IN_M)
-                          * self.CF_WALK_3 * self.weight)
-                          * self.duration * self.MIN_IN_H))
+                           * self.CF_WALK_3 * self.weight)
+                           * self.duration * self.MIN_IN_H))
         return spent_calories
 
 
