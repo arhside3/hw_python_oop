@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class InfoMessage:
     """Информационное сообщение о тренировке."""
@@ -9,7 +10,6 @@ class InfoMessage:
     distance: float
     speed: float
     calories: float
-
 
     def get_message(self) -> str:
         return (f'Тип тренировки: {self.training_type}; '
@@ -23,14 +23,13 @@ class InfoMessage:
 class Training:
     """Базовый класс тренировки."""
 
-    LEN_STEP = 0.65 # длина шага при ходьбе
-    M_IN_KM = 1000 # перевод из метров в километры
-    M_IN_H = 60 # перевод из минут в часы
+    LEN_STEP = 0.65  # длина шага при ходьбе
+    M_IN_KM = 1000  # перевод из метров в километры
+    M_IN_H = 60  # перевод из минут в часы
 
     action: int
     duration: float
     weight: float
-       
 
     def get_distance(self) -> float:
         """Рассчитывает среднюю скорость движения в км."""
@@ -51,19 +50,18 @@ class Training:
 
         return InfoMessage(
                self.__class__.__name__,
-               self.duration,
-               self.get_distance(),
-               self.get_mean_speed(),
-               self.get_spent_calories()
-               )
+              self.duration,
+              self.get_distance(),
+              self.get_mean_speed(),
+              self.get_spent_calories())
 
 
 @dataclass
 class Running(Training):
     """Тренировка: бег."""
 
-    CALORIES_MEAN_SPEED_MULTIPLIER = 18 # множитель при средней скорости для получения затраченных калорий
-    CALORIES_MEAN_SPEED_SHIFT = 1.79 # ее сдвиг
+    CALORIES_MEAN_SPEED_MULTIPLIER = 18  # множитель при средней скорости
+    CALORIES_MEAN_SPEED_SHIFT = 1.79  # ее сдвиг
 
     def get_spent_calories(self) -> float:
         """Получает количество затраченных калорий."""
@@ -71,18 +69,18 @@ class Running(Training):
         return ((self.CALORIES_MEAN_SPEED_MULTIPLIER
                  * self.get_mean_speed()
                  + self.CALORIES_MEAN_SPEED_SHIFT) * self.weight
-                 / self.M_IN_KM * self.duration * self.M_IN_H)
+                   / self.M_IN_KM * self.duration * self.M_IN_H)
 
 
 @dataclass
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
 
-    CALORIES_MEAN_SPEED_WALK = 0.035 # множитель при средней скорости для получения затраченных калорий
-    CF_WALK = 2 # просто коэфицент для формулы
-    CALORIES_MEAN_SPEED_SHIFT = 0.029 # ее сдвиг
-    KMH_IN_MSEC = 0.278 # перевод в метры секунды
-    CM_IN_M = 100 # перевод рост в метрах
+    CALORIES_MEAN_SPEED_WALK = 0.035  # множитель при средней скорости
+    CF_WALK = 2  # просто коэфицент для формулы
+    CALORIES_MEAN_SPEED_SHIFT = 0.029  # ее сдвиг
+    KMH_IN_MSEC = 0.278  # перевод в метры секунды
+    CM_IN_M = 100  # перевод рост в метрах
 
 
     action: int
@@ -104,9 +102,9 @@ class SportsWalking(Training):
 class Swimming(Training):
     """Тренировка: плавание."""
 
-    CALORIES_MEAN_SPEED_SWIM = 1.1 # множитель при средней скорости для получения затраченных калорий
-    CF_SW = 2 # просто коэфицент для формулы
-    LEN_STEP = 1.38 # длина гребка
+    CALORIES_MEAN_SPEED_SWIM = 1.1  # множитель при средней скорости
+    CF_SW = 2  # просто коэфицент для формулы
+    LEN_STEP = 1.38  # длина гребка
 
     action: int
     duration: float
