@@ -133,7 +133,7 @@ def read_package(workout_type: str, data) -> Training:
 
     try:
         return Type_dict[workout_type](* data)
-    except(KeyError, ValueError):
+    except (KeyError, ValueError):
         return ('Ошибка неверный ключ')
 
 
