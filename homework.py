@@ -48,12 +48,11 @@ class Training:
     def show_training_info(self) -> InfoMessage:
         """Возвращает информационное сообщение о выполненной тренировке."""
 
-        return InfoMessage(
-             self.__class__.__name__,
-              self.duration,
-              self.get_distance(),
-              self.get_mean_speed(),
-              self.get_spent_calories())
+        return InfoMessage(self.__class__.__name__,
+                           self.duration,
+                           self.get_distance(),
+                           self.get_mean_speed(),
+                           self.get_spent_calories())
 
 
 @dataclass
@@ -69,7 +68,7 @@ class Running(Training):
         return ((self.CALORIES_MEAN_SPEED_MULTIPLIER
                  * self.get_mean_speed()
                  + self.CALORIES_MEAN_SPEED_SHIFT) * self.weight
-                    / self.M_IN_KM * self.duration * self.M_IN_H)
+                 / self.M_IN_KM * self.duration * self.M_IN_H)
 
 
 @dataclass
@@ -93,7 +92,7 @@ class SportsWalking(Training):
         return ((self.CALORIES_MEAN_SPEED_WALK * self.weight
                 + (self.get_mean_speed() * self.KMH_IN_MSEC ** self.CF_WALK
                 / (self.height / self.CM_IN_M))
-                  * self.CALORIES_MEAN_SPEED_SHIFT
+                * self.CALORIES_MEAN_SPEED_SHIFT
                 * self.weight) * self.duration * self.M_IN_H)
 
 
@@ -110,7 +109,6 @@ class Swimming(Training):
     weight: float
     length_pool: int
     count_pool: int
-
 
     def get_mean_speed(self) -> float:
         """Получает среднюю скорость движения."""
