@@ -49,7 +49,7 @@ class Training:
         """Возвращает информационное сообщение о выполненной тренировке."""
 
         return InfoMessage(
-               self.__class__.__name__,
+             self.__class__.__name__,
               self.duration,
               self.get_distance(),
               self.get_mean_speed(),
@@ -69,7 +69,7 @@ class Running(Training):
         return ((self.CALORIES_MEAN_SPEED_MULTIPLIER
                  * self.get_mean_speed()
                  + self.CALORIES_MEAN_SPEED_SHIFT) * self.weight
-                   / self.M_IN_KM * self.duration * self.M_IN_H)
+                    / self.M_IN_KM * self.duration * self.M_IN_H)
 
 
 @dataclass
@@ -82,7 +82,6 @@ class SportsWalking(Training):
     KMH_IN_MSEC = 0.278  # перевод в метры секунды
     CM_IN_M = 100  # перевод рост в метрах
 
-
     action: int
     duration: float
     weight: float
@@ -92,9 +91,9 @@ class SportsWalking(Training):
         """Получает количество затраченных калорий."""
 
         return ((self.CALORIES_MEAN_SPEED_WALK * self.weight
-                + (self.get_mean_speed() * self.KMH_IN_MSEC ** self.CF_WALK 
+                + (self.get_mean_speed() * self.KMH_IN_MSEC ** self.CF_WALK
                 / (self.height / self.CM_IN_M))
-                * self.CALORIES_MEAN_SPEED_SHIFT
+                  * self.CALORIES_MEAN_SPEED_SHIFT
                 * self.weight) * self.duration * self.M_IN_H)
 
 
@@ -125,15 +124,17 @@ class Swimming(Training):
         return ((self.get_mean_speed() + self.CALORIES_MEAN_SPEED_SWIM)
                 * self.CF_SW * self.weight)
 
+
 Type_dict = {'SWM': Swimming,
              'RUN': Running,
              'WLK': SportsWalking}
+
 
 def read_package(workout_type: str, data) -> Training:
     """Читает данные полученные от датчиков."""
 
     try:
-        return Type_dict[workout_type](*data)
+        return Type_dict[workout_type](* data)
     except(KeyError, ValueError):
         return ('Ошибка неверный ключ')
 
