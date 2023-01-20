@@ -89,11 +89,13 @@ class SportsWalking(Training):
     def get_spent_calories(self) -> float:
         """Получает количество затраченных калорий."""
 
-        calories_1 = self.CALORIES_MEAN_SPEED_WALK * self.weight
-        calories_2 = self.get_mean_speed()**2 // self.height
-        calories_3 = calories_2 * self.CALORIES_MEAN_SPEED_SHIFT * self.weight
-        calories = (calories_1 + calories_3) * self.duration * 60
-        return calories
+        speed_in_second = self.get_mean_speed() * self.KMH_IN_MSEC
+        spent_calories = ((self.CALORIES_MEAN_SPEED_WALK * self.weight
+                          + (speed_in_second**2 / (self.height / self.CM_IN_M))
+                          * self.CALORIES_MEAN_SPEED_SHIFT
+                          * self.weight) * self.duration * self.M_IN_H)
+        return spent_calories
+
 
 
 @dataclass
@@ -120,8 +122,10 @@ class Swimming(Training):
         """Получает количество затраченных калорий."""
 
         calories_1 = self.get_mean_speed() + self.CALORIES_MEAN_SPEED_SWIM
-        calories = calories_1 * self.CF_SW * self.weight
+        calories = ((calories_1 * self.CF_SW
+                    * self.weight * self.duration))
         return calories
+
 
 
 Type_dict = {'SWM': Swimming,
