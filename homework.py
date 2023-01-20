@@ -97,7 +97,6 @@ class SportsWalking(Training):
         return spent_calories
 
 
-
 @dataclass
 class Swimming(Training):
     """Тренировка: плавание."""
@@ -125,7 +124,6 @@ class Swimming(Training):
         calories = ((calories_1 * self.CF_SW
                     * self.weight * self.duration))
         return calories
-
 
 
 Type_dict = {'SWM': Swimming,
