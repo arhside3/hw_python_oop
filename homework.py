@@ -61,7 +61,7 @@ class Training:
         """Возвращает информационное сообщение о выполненной тренировке."""
 
         return InfoMessage(
-            self.__class__.__name__,
+            type(self).__name__,
             self.duration,
             self.get_distance(),
             self.get_mean_speed(),
@@ -98,14 +98,14 @@ class SportsWalking(Training):
     """Тренировка: спортивная ходьба.
     Attributes:
         CALORIES_WEIGHT_MULTIPLIER: множитель при средней скорости
-        CF_WALK: просто коэфицент для формулы
+        COEFICENT_FOR_WALK: просто коэфицент для формулы
         CALORIES_SPEED_HEIGHT_MULTIPLIER: ее сдвиг
         KMH_IN_MSEC: перевод в метры секунды
         CM_IN_M: перевод рост в метрах
     """
 
     CALORIES_WEIGHT_MULTIPLIER = 0.035
-    CF_WALK = 2
+    COEFICENT_FOR_WALK = 2
     CALORIES_SPEED_HEIGHT_MULTIPLIER = 0.029
     KMH_IN_MSEC = 0.278
     CM_IN_M = 100
@@ -138,7 +138,7 @@ class Swimming(Training):
     """Тренировка: плавание."""
 
     CALORIES_MEAN_SPEED_SWIM = 1.1  # множитель при средней скорости
-    CF_SW = 2  # просто коэфицент для формулы
+    COEFICENT_FOR_SWIM = 2  # просто коэфицент для формулы
     LEN_STEP = 1.38  # длина гребка
 
     def __init__(
@@ -165,7 +165,7 @@ class Swimming(Training):
 
         return (
             (self.get_mean_speed() + self.CALORIES_MEAN_SPEED_SWIM)
-            * self.CF_SW
+            * self.COEFICENT_FOR_SWIM 
             * self.weight
             * self.duration
         )
