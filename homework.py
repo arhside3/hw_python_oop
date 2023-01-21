@@ -22,11 +22,16 @@ class InfoMessage:
 
 
 class Training:
-    """Базовый класс тренировки."""
+    """Базовый класс тренировки.
+    Attributes:
+        LEN_STEP: длина шага при ходьбе
+        M_IN_KM: перевод из метров в километры
+        MIN_IN_H: перевод из минут в часы
+    """
 
-    LEN_STEP = 0.65  # длина шага при ходьбе
-    M_IN_KM = 1000  # перевод из метров в километры
-    MIN_IN_H = 60  # перевод из минут в часы
+    LEN_STEP = 0.65
+    M_IN_KM = 1000
+    MIN_IN_H = 60
 
     def __init__(
         self,
@@ -65,10 +70,14 @@ class Training:
 
 
 class Running(Training):
-    """Тренировка: бег."""
+    """Тренировка: бег.
+    Attributes:
+        CALORIES_MEAN_SPEED_MULTIPLIER: множитель при средней скорости
+        CALORIES_MEAN_SPEED_SHIFT: ее сдвиг
+    """
 
-    CALORIES_MEAN_SPEED_MULTIPLIER = 18  # множитель при средней скорости
-    CALORIES_MEAN_SPEED_SHIFT = 1.79  # ее сдвиг
+    CALORIES_MEAN_SPEED_MULTIPLIER = 18
+    CALORIES_MEAN_SPEED_SHIFT = 1.79
 
     def get_spent_calories(self) -> float:
         """Получает количество затраченных калорий."""
@@ -86,13 +95,20 @@ class Running(Training):
 
 
 class SportsWalking(Training):
-    """Тренировка: спортивная ходьба."""
+    """Тренировка: спортивная ходьба.
+    Attributes:
+        CALORIES_WEIGHT_MULTIPLIER: множитель при средней скорости
+        CF_WALK: просто коэфицент для формулы
+        CALORIES_SPEED_HEIGHT_MULTIPLIER: ее сдвиг
+        KMH_IN_MSEC: перевод в метры секунды
+        CM_IN_M: перевод рост в метрах
+    """
 
-    CALORIES_WEIGHT_MULTIPLIER = 0.035  # множитель при средней скорости
-    CF_WALK = 2  # просто коэфицент для формулы
-    CALORIES_SPEED_HEIGHT_MULTIPLIER = 0.029  # ее сдвиг
-    KMH_IN_MSEC = 0.278  # перевод в метры секунды
-    CM_IN_M = 100  # перевод рост в метрах
+    CALORIES_WEIGHT_MULTIPLIER = 0.035
+    CF_WALK = 2
+    CALORIES_SPEED_HEIGHT_MULTIPLIER = 0.029
+    KMH_IN_MSEC = 0.278
+    CM_IN_M = 100
 
     def __init__(
         self, action: int, duration: float, weight: float, height: int
@@ -159,7 +175,12 @@ TYPE_DICT = {'SWM': Swimming, 'RUN': Running, 'WLK': SportsWalking}
 
 
 def read_package(workout_type: str, data) -> Training:
-    """Читает данные полученные от датчиков."""
+    """Читает данные полученные от датчиков.
+    Args:
+        workout_type: тип тренировки
+        data: читает данные в классах
+    """
+
     try:
         return TYPE_DICT[workout_type](*data)
     except (KeyError, TypeError):
