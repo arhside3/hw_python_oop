@@ -1,9 +1,14 @@
 from dataclasses import dataclass
+import csv
 
 
 @dataclass
 class InfoMessage:
-    """Информационное сообщение о тренировке."""
+    """Информационное сообщение о тренировке.
+
+    Returns:
+        get_message: выводит сообщение об тренировке
+    """
 
     training_type: str
     duration: float
@@ -23,10 +28,18 @@ class InfoMessage:
 
 class Training:
     """Базовый класс тренировки.
+
     Attributes:
-        LEN_STEP: длина шага при ходьбе
-        M_IN_KM: перевод из метров в километры
-        MIN_IN_H: перевод из минут в часы
+        LEN_STEP: длина шага при ходьбе (измеряется в метрах)
+        M_IN_KM: множитель для перевода из метров в километры
+        MIN_IN_H: множитель для перевода из минут в часы
+
+    Returns:
+        __init__: получаем переменные
+        get_distance: рассчитывает среднюю скорость движение в км
+        get_mean_speed: Получает среднюю скорость движения
+        get_spent_calories: Получает количество затраченных калорий
+        show_training_info: Возвращает инфу(сообщение о выполненной тренировке)
     """
 
     LEN_STEP = 0.65
@@ -35,10 +48,10 @@ class Training:
 
     def __init__(
         self,
-        action: int,
+        action: float,
         duration: float,
         weight: float,
-    ):
+    ) -> None:
         self.action = action
         self.duration = duration
         self.weight = weight
@@ -54,11 +67,26 @@ class Training:
         return self.get_distance() / self.duration
 
     def get_spent_calories(self) -> float:
-        """Получает количество затраченных калорий."""
+        """Получает количество затраченных калорий.
+
+        Raises:
+            Exception-1: Исключение, возникающее в случаях, когда наследник
+            класса не переопределил метод, который должен был
+
+            Exception-2: Исключение должно подниматься методами
+            пользовательских базовых классов как индикатор того,
+            что наследникам требуется переопределить такие методы
+        """
+
         raise NotImplementedError
 
     def show_training_info(self) -> InfoMessage:
-        """Возвращает информационное сообщение о выполненной тренировке."""
+        """Формирует информационное сообщение о выполненной тренировке.
+
+        Raises:
+            Exception: функция возращает время, дистанцию(функцию),
+            среднюю скорость(функцию), и расход калорий(функцию)
+        """
 
         return InfoMessage(
             type(self).__name__,
@@ -71,9 +99,13 @@ class Training:
 
 class Running(Training):
     """Тренировка: бег.
+
     Attributes:
         CALORIES_MEAN_SPEED_MULTIPLIER: множитель при средней скорости
         CALORIES_MEAN_SPEED_SHIFT: ее сдвиг
+
+    Returns:
+        get_spent_calories: Получает количество затраченных калорий
     """
 
     CALORIES_MEAN_SPEED_MULTIPLIER = 18
@@ -96,23 +128,28 @@ class Running(Training):
 
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба.
+
     Attributes:
         CALORIES_WEIGHT_MULTIPLIER: множитель при средней скорости
-        COEFICENT_FOR_WALK: просто коэфицент для формулы
+        CALORIES_MEAN_WALK_SHIFT: просто коэфицент для формулы
         CALORIES_SPEED_HEIGHT_MULTIPLIER: ее сдвиг
         KMH_IN_MSEC: перевод в метры секунды
         CM_IN_M: перевод рост в метрах
+
+    Returns:
+        __init__: получаем переменные
+        get_spent_calories: Получает количество затраченных калорий
     """
 
     CALORIES_WEIGHT_MULTIPLIER = 0.035
-    COEFICENT_FOR_WALK = 2
+    CALORIES_MEAN_WALK_SHIFT = 2
     CALORIES_SPEED_HEIGHT_MULTIPLIER = 0.029
-    KMH_IN_MSEC = 0.278
+    KMH_IN_MSEC = 0.278  # множитель для перевода в метры секунды
     CM_IN_M = 100
 
     def __init__(
-        self, action: int, duration: float, weight: float, height: int
-    ):
+        self, action: float, duration: float, weight: float, height: float
+    ) -> None:
         super().__init__(action, duration, weight)
         self.height = height
 
@@ -135,20 +172,31 @@ class SportsWalking(Training):
 
 
 class Swimming(Training):
-    """Тренировка: плавание."""
+    """Тренировка: плавание.
 
-    CALORIES_MEAN_SPEED_SWIM = 1.1  # множитель при средней скорости
-    COEFICENT_FOR_SWIM = 2  # просто коэфицент для формулы
-    LEN_STEP = 1.38  # длина гребка
+     Attributes:
+        CALORIES_MEAN_SPEED_SWIM: множитель при средней скорости
+        CALORIES_MEAN_SWIM_MULTIPLIER: просто коэфицент для формулы
+        LEN_STEP = 1.38: длина гребка (измеряется в метрах)
+
+    Returns:
+        __init__: получаем переменные
+        get_mean_speed: Получает среднюю скорость движения
+        get_spent_calories: Получает количество затраченных калорий
+    """
+
+    CALORIES_MEAN_SPEED_SWIM = 1.1
+    CALORIES_MEAN_SWIM_MULTIPLIER = 2
+    LEN_STEP = 1.38
 
     def __init__(
         self,
-        action: int,
+        action: float,
         duration: float,
         weight: float,
         length_pool: int,
         count_pool: int,
-    ):
+    ) -> None:
         super().__init__(action, duration, weight)
         self.length_pool = length_pool
         self.count_pool = count_pool
@@ -165,7 +213,7 @@ class Swimming(Training):
 
         return (
             (self.get_mean_speed() + self.CALORIES_MEAN_SPEED_SWIM)
-            * self.COEFICENT_FOR_SWIM
+            * self.CALORIES_MEAN_SWIM_MULTIPLIER
             * self.weight
             * self.duration
         )
@@ -174,31 +222,37 @@ class Swimming(Training):
 TYPE_DICT = {'SWM': Swimming, 'RUN': Running, 'WLK': SportsWalking}
 
 
-def read_package(workout_type: str, data) -> Training:
+def read_package(workout_type: str, data: str) -> Training:
     """Читает данные полученные от датчиков.
+
     Args:
         workout_type: тип тренировки
-        data: читает данные в классах
+        data: параметр для инициализации класса
     """
 
     try:
         return TYPE_DICT[workout_type](*data)
-    except (KeyError, TypeError):
-        print("Ошибка давай по новой")
+    except (KeyError, TypeError) as err:
+        raise Exception(f'Неправильные входные данные: {err}')
 
 
-def main(training: Training):
+def main(training: Training) -> float:
     """Главная функция."""
 
     print(training.show_training_info().get_message())
 
 
 if __name__ == '__main__':
-    packages = [
-        ('SWM', [720, 1, 80, 25, 40]),
-        ('RUN', [15000, 1, 75]),
-        ('WLK', [9000, 1, 75, 180]),
-    ]
+    with open('packag.csv') as reader:
+        packages = csv.reader()
 
     for workout_type, data in packages:
-        main(read_package(workout_type, data))
+        try:
+            main(
+                read_package(
+                    workout_type, data,
+                    list(float)
+                ),
+            )
+        except (KeyError, TypeError, ValueError) as err:
+            print(f'Неправильные входные данные: {err}')
